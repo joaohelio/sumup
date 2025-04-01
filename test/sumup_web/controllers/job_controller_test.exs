@@ -1,5 +1,5 @@
-defmodule SumupTest do
-  use ExUnit.Case, async: true
+defmodule SumupWeb.JobControllerTest do
+  use SumupWeb.ConnCase, async: true
 
   @tasks [
     %{"name" => "task-1", "command" => "touch /tmp/file1"},
@@ -20,11 +20,14 @@ defmodule SumupTest do
     }
   ]
 
-  describe "process/1" do
-    test "processes tasks in correct order based on dependencies" do
-      {:ok, ordered_tasks} = Sumup.process(@tasks, :json)
+  setup %{conn: conn} do
+    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+  end
 
-      assert ordered_tasks == [
+  describe "process_json/2" do
+    test "processes tasks in correct order based on dependencies", %{conn: conn} do
+      conn = post(conn, "/api/jobs_to_json", tasks: @tasks)
+      assert json_response(conn, 200) == [
         %{"name" => "task-1", "command" => "touch /tmp/file1"},
         %{
           "name" => "task-3",
@@ -43,11 +46,12 @@ defmodule SumupTest do
         }
       ]
     end
+  end
 
-    test "processes tasks in correct order based on dependencies and converts to bash script" do
-      {:ok, script} = Sumup.process(@tasks, :bash)
-
-      assert script == """
+  describe "process_script/2" do
+    test "processes tasks in correct order based on dependencies and converts to bash script", %{conn: conn} do
+      conn = post(conn, "/api/jobs_to_script", tasks: @tasks)
+      assert text_response(conn, 200) == """
       #!/usr/bin/env bash
       touch /tmp/file1
       echo 'Hello World!' > /tmp/file1

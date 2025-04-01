@@ -25,7 +25,7 @@ defmodule Sumup do
   def process(tasks, :bash) do
     Sorter.sort(tasks)
     |> case do
-      {:ok, ordered_tasks} -> Parser.to_bash_script(ordered_tasks)
+      {:ok, ordered_tasks} -> {:ok, Parser.to_bash_script(ordered_tasks)}
       error -> {:error, error}
     end
   end
