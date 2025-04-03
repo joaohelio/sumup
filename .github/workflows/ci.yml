@@ -1,0 +1,50 @@
+---
+  name: CI
+
+  on: push
+
+  env:
+    MIX_ENV: "test"
+
+  jobs:
+    test:
+      runs-on: ubuntu-latest
+
+      name: Elixir ${{matrix.elixir}} (OTP ${{matrix.otp}})
+      strategy:
+        matrix:
+          elixir: ["1.14.5"]
+          otp: ["26.2.5.9"]
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Setup Elixir
+          uses: erlef/setup-beam@v1
+          with:
+            otp-version: ${{matrix.otp}}
+            elixir-version: ${{matrix.elixir}}
+
+        - name: Retrieve Mix dependencies cache
+          uses: actions/cache@v3
+          id: mix-cache
+          with:
+            path: |
+              deps
+              _build
+            key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+        - name: Install Mix dependencies
+          if: steps.mix-cache.outputs.cache-hit != 'true'
+          run: |
+            mix local.rebar --force
+            mix local.hex --force
+            mix deps.get
+
+        - name: Check code formatting
+          run: mix format --check-formatted
+
+        - name: Run linter
+          run: mix credo --strict
+
+        - name: Run tests
+          run: MIX_ENV=test mix do compile --warnings-as-errors, test --warnings-as-errors
