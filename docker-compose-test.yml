@@ -1,0 +1,3 @@
+services:
+  sumup:
+    env_file: .env.test
