@@ -1,4 +1,3 @@
-
 defmodule Sumup.Parser do
   @doc """
   Convert tasks to a bash script.

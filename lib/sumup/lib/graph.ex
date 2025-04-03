@@ -30,7 +30,9 @@ defmodule Sumup.Lib.Graph do
       dependencies
       |> Enum.reduce({dependency_graph, incoming_edges}, fn dependency, {graph, edges} ->
         # Add this task as a dependent of its dependency
-        graph = Map.update(graph, dependency, [task_name], fn dependents -> [task_name | dependents] end)
+        graph =
+          Map.update(graph, dependency, [task_name], fn dependents -> [task_name | dependents] end)
+
         # Increment incoming edge count for this task
         edges = Map.update(edges, task_name, 1, &(&1 + 1))
 

@@ -7,6 +7,7 @@ defmodule SumupWeb.JobController do
         conn
         |> put_status(:ok)
         |> json(ordered_tasks)
+
       {:error, error} ->
         conn
         |> put_status(:bad_request)
@@ -20,6 +21,7 @@ defmodule SumupWeb.JobController do
         conn
         |> put_status(:ok)
         |> text(script)
+
       {:error, error} ->
         conn
         |> put_status(:bad_request)

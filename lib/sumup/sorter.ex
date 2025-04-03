@@ -15,6 +15,7 @@ defmodule Sumup.Sorter do
   - `{:error, :missing_task, task_name}` - If a required task is missing
   """
   def sort([]), do: {:ok, []}
+
   def sort(tasks) do
     # Build a map of task name to task for quick lookup
     task_map = Map.new(tasks, &{&1["name"], &1})
