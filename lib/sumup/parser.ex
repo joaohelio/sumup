@@ -1,5 +1,5 @@
 defmodule Sumup.Parser do
-  @doc """
+  @moduledoc """
   Convert tasks to a bash script.
 
   Takes a list of ordered tasks and returns a bash script as a string.
