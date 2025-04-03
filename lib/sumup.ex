@@ -7,8 +7,8 @@ defmodule Sumup do
   if it comes from the database, an external API or others.
   """
 
-  alias Sumup.Sorter
   alias Sumup.Parser
+  alias Sumup.Sorter
 
   @doc """
   Process tasks based on the format.
