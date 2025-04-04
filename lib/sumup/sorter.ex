@@ -20,7 +20,6 @@ defmodule Sumup.Sorter do
     # Build a map of task name to task for quick lookup
     task_map = Map.new(tasks, &{&1["name"], &1})
 
-    # Build dependency graph and reverse graph (for determining nodes with no incoming edges)
     try do
       {dependency_graph, incoming_edges} = Graph.build_dependencies(tasks, task_map)
 

@@ -1,6 +1,6 @@
 # Job Processor
 
-A Phoenix application that processes job tasks with dependencies and returns them in the correct execution order.
+Processes job tasks with dependencies and returns them in the correct execution order.
 
 ## Features
 
